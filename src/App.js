@@ -10,8 +10,28 @@ class App extends Component {
         { description: "Running through the park", isCompleted: true},
         { description: "Swimming at the pool", isCompleted: false},
         { description: "Riding through Marin", isCompleted: false}
-      ]
+      ],
+      newTodoDescription: ''
     };
+  }
+
+  toggleComplete(index){
+    const todos = this.state.todos.slice();
+    const todo = todos[index];
+    todo.isCompleted = todo.isCompleted ? false : true;
+    this.setState({ todos: todos })
+    console.log(index);
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+    if (!this.state.newTodoDescription) {return}
+    const newTodo = { description: this.state.newTodoDescription , isCompleted: false};
+    this.setState({ todos: [...this.state.todos, newTodo], newTodoDescription: ''});
+  }
+
+  handleChange(event){
+    this.setState({ newTodoDescription: event.target.value });
   }
 
   render() {
@@ -19,9 +39,15 @@ class App extends Component {
       <div className="App">
         <ul>
           { this.state.todos.map( (todo, index) =>
-            <ToDo key = {index} description = {todo.description} isCompleted = {todo.iscompleted}/>
+            <ToDo key = {index} description = {todo.description} isCompleted = {todo.iscompleted} toggleComplete = {
+              ()=> this.toggleComplete(index)
+            }/>
           )}
         </ul>
+        <form onSubmit = { (event) => this.handleSubmit(event)}>
+          <input type ="text" value={this.state.newTodoDescription} onChange = { (event) => this.handleChange(event) } />
+          <input type ="submit" />
+        </form>
       </div>
     );
   }
