@@ -31,8 +31,15 @@ class App extends Component {
   }
 
   handleChange(event){
-    this.setState({ newTodoDescription: event.target.value });
+    this.setState({ newTodoDescription: event.target.value});
   }
+
+  deleteToDo(deleted){
+    const deletedList = this.state.todos.filter(item => item !== deleted);
+    this.setState({todos: deletedList});
+  }
+
+
 
   render() {
     return (
@@ -40,9 +47,7 @@ class App extends Component {
         <ul>
           { this.state.todos.map( (todo, index) =>
 
-            <ToDo key = {index} description = {todo.description} isCompleted = {todo.isCompleted} toggleComplete = {
-              ()=> this.toggleComplete(index)
-            }/>
+            <ToDo key = {index} description = {todo.description} isCompleted = {todo.isCompleted} toggleComplete = {()=> this.toggleComplete(index)} deleted={()=>this.deleteToDo(todo)} />
 
           )}
         </ul>
