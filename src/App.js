@@ -13,6 +13,9 @@ class App extends Component {
       ],
       newTodoDescription: ''
     };
+
+    // bind() is necessary if we didn't use the anonymous fxn in the prop value on line 63
+    // this.deleteToDo = this.deleteToDo.bind(this);
   }
 
   toggleComplete(index){
@@ -35,7 +38,12 @@ class App extends Component {
   }
 
   deleteToDo(deleted){
+    // expecting single 'todo' object from the array of objects stored at todos in the state object
+
+    // creating new array that does not contain the deleted row todo object using filter
     const deletedList = this.state.todos.filter(item => item !== deleted);
+
+    // updating the state property 'todos' with the new array of todo objects
     this.setState({todos: deletedList});
   }
 
@@ -47,12 +55,21 @@ class App extends Component {
         <ul>
           { this.state.todos.map( (todo, index) =>
 
-            <ToDo key = {index} description = {todo.description} isCompleted = {todo.isCompleted} toggleComplete = {()=> this.toggleComplete(index)} deleted={()=>this.deleteToDo(todo)} />
-
+            // passing props to the child ToDo component
+            <ToDo key={index}
+                  description={todo.description}
+                  isCompleted={todo.isCompleted}
+                  toggleComplete={()=> this.toggleComplete(index)}
+                  deleted={()=>this.deleteToDo(todo)}
+            />
+            // prop 'deleted' has value of an anonymous function that calls our deleteToDo method, passing an argument of the current 'todo' row item
           )}
         </ul>
         <form onSubmit = { (event) => this.handleSubmit(event)}>
-          <input type ="text" value={this.state.newTodoDescription} onChange = { (event) => this.handleChange(event) } />
+          <input type="text"
+                value={this.state.newTodoDescription}
+                onChange={ (event) => this.handleChange(event) }
+          />
           <input type ="submit" />
         </form>
       </div>
